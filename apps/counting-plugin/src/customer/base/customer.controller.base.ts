@@ -9,6 +9,7 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
+import { Prisma } from "@prisma/client";
 import * as common from "@nestjs/common";
 import * as swagger from "@nestjs/swagger";
 import { isRecordNotFoundError } from "../../prisma.util";
@@ -58,6 +59,19 @@ export class CustomerControllerBase {
         updatedAt: true,
       },
     });
+  }
+
+  async count(@common.Query() query: CustomerWhereInput): Promise<number> {
+    // Use the query to filter the count if needed (optional)
+    const args: Prisma.CustomerCountArgs = {
+      where: query,
+    };
+    return this.service.count(args);
+  }
+  @common.Get("/count")
+  @swagger.ApiOkResponse({ type: Number })
+  async getCount(@common.Query() query: CustomerWhereInput): Promise<number> {
+    return this.count(query);
   }
 
   @common.Get()
@@ -152,8 +166,8 @@ export class CustomerControllerBase {
           updatedAt: true,
         },
       });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
+    } catch (error: unknown) {
+      if (isRecordNotFoundError(error as Error)) {
         throw new errors.NotFoundException(
           `No resource was found for ${JSON.stringify(params)}`
         );
@@ -187,8 +201,8 @@ export class CustomerControllerBase {
           updatedAt: true,
         },
       });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
+    } catch (error: unknown) {
+      if (isRecordNotFoundError(error as Error)) {
         throw new errors.NotFoundException(
           `No resource was found for ${JSON.stringify(params)}`
         );

@@ -29,7 +29,7 @@ export class CustomerServiceBase {
   async findOne<T extends Prisma.CustomerFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.CustomerFindUniqueArgs>
   ): Promise<Customer | null> {
-    return this.prisma.customer.findUnique(args);
+    return this.prisma.customer.findUnique(args) as Promise<Customer | null>;
   }
   async create<T extends Prisma.CustomerCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.CustomerCreateArgs>

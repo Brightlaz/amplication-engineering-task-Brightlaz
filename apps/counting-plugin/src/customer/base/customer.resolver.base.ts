@@ -90,8 +90,8 @@ export class CustomerResolverBase {
             : undefined,
         },
       });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
+    } catch (error: unknown) {
+      if (isRecordNotFoundError(error as Error)) {
         throw new apollo.ApolloError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
@@ -106,8 +106,8 @@ export class CustomerResolverBase {
   ): Promise<Customer | null> {
     try {
       return await this.service.delete(args);
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
+    } catch (error: unknown) {
+      if (isRecordNotFoundError(error as Error)) {
         throw new apollo.ApolloError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
